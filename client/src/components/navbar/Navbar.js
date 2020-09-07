@@ -4,6 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,11 @@ const Navbar = () => {
           <Typography variant="h6" className={classes.title}>
             Events
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit">Liste d'évenements</Button>
+          <Button color="inherit">Se connecter</Button>
+          <Button component={Link} to="/register" color="inherit">
+            S'enregistrer
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
