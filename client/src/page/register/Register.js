@@ -4,8 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {connect} from 'react-redux'
-import {registerUser} from '../../redux/actions/userActions'
+import { connect } from "react-redux";
+import { registerUser } from "../../redux/actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = ({registerUser}) => {
+const Register = ({ registerUser, history }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -44,8 +44,7 @@ const Register = ({registerUser}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    registerUser(formData)
-    
+    registerUser(formData, history);
   };
 
   return (
@@ -98,4 +97,4 @@ const Register = ({registerUser}) => {
   );
 };
 
-export default connect(null, {registerUser})(Register);
+export default connect(null, { registerUser })(Register);
