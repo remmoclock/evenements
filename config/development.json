@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://admin:vXosjkQPiX1kiueE@events.balh4.gcp.mongodb.net/collections?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://ahmad:992ur3Oi1Ef1OlNq@events.balh4.gcp.mongodb.net/collections?retryWrites=true&w=majority",
   "jwtSecretKey": "VB2qLoytr1VaeET5xLB7XFkOAIqys2XZmXZxNy5d"
 }

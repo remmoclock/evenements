@@ -1,11 +1,11 @@
-import React, { Fragment, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import Moment from "react-moment";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import { connect } from "react-redux";
-import { getEvents } from "../../redux/actions/eventsActions";
+import React, { Fragment, useEffect } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import { Link } from "react-router-dom"
+import Moment from "react-moment"
+import Typography from "@material-ui/core/Typography"
+import Card from "@material-ui/core/Card"
+import { connect } from "react-redux"
+import { getEvents } from "../../redux/actions/eventsActions"
 
 const useStyles = makeStyles({
   card: {
@@ -23,35 +23,53 @@ const useStyles = makeStyles({
     objectFit: "cover",
     display: "block",
   },
-});
+})
 
-const EventList = ({ getEvents }) => {
-  const classes = useStyles();
+const mapState = (state) => ({
+  event: state.event,
+})
+
+const EventList = ({ getEvents, event: { events, loading } }) => {
+  const classes = useStyles()
   useEffect(() => {
-    getEvents();
-  }, [getEvents]);
+    getEvents()
+  }, [getEvents])
 
   return (
     <Fragment>
-      <Card component={Link} to={`/event/event`} className={classes.card}>
-        <div className={classes.mediaContainer}>
-          <img
-            src={require(`../../assets/img/cinema.jpg`)}
-            className={classes.cardMedia}
-            alt=""
-          />
-        </div>
-        <div className={classes.mediaDetails}>
-          <Typography variant="h2" color="secondary">
-            Nom de l'event
-          </Typography>
-          <Typography variant="body1">
-            Créé le <Moment format="DD/MM/YYYY">{new Date()}</Moment> par Ahmad
-          </Typography>
-        </div>
-      </Card>
+      {!loading && events ? (
+        events.map((evt) => {
+          return (
+            <Card
+              component={Link}
+              to={`/event/${evt._id}`}
+              className={classes.card}
+              key={evt._id}
+            >
+              <div className={classes.mediaContainer}>
+                <img
+                  src={require(`../../assets/img/${evt.type}.jpg`)}
+                  className={classes.cardMedia}
+                  alt=""
+                />
+              </div>
+              <div className={classes.mediaDetails}>
+                <Typography variant="h2" color="secondary">
+                  {evt.eventName}
+                </Typography>
+                <Typography variant="body1">
+                  Créé le <Moment format="DD/MM/YYYY">{evt.date}</Moment> par{" "}
+                  {evt.userName}
+                </Typography>
+              </div>
+            </Card>
+          )
+        })
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </Fragment>
-  );
-};
+  )
+}
 
-export default connect(null, { getEvents })(EventList);
+export default connect(mapState, { getEvents })(EventList)

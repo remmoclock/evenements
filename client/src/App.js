@@ -10,6 +10,7 @@ import Login from "./page/login/Login";
 import { connect } from "react-redux";
 import { loadUser } from "./redux/actions/userActions";
 import EventList from "./page/eventList/EventList";
+import Event from "./page/event/Event";
 
 function App({ loadUser }) {
   useEffect(() => {
@@ -25,6 +26,7 @@ function App({ loadUser }) {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/dashboard" component={EventList} />
+            <Route exact path="/event/:id" component={Event} />
           </Switch>
         </div>
       </ThemeProvider>
