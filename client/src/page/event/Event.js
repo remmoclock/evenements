@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, Fragment } from "react"
 import { eventStyles } from "./EventStyles"
 import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
@@ -10,18 +10,20 @@ import Marker from "../../components/marker/Marker"
 import { connect } from "react-redux"
 import { getEvent } from "../../redux/actions/eventsActions"
 import AttendeeItem from "../../components/attendees/AttendeeItem"
+import EventComments from "../../components/eventComments/EventComments"
 
 const mapState = (state) => ({
   event: state.event,
+  user: state.user,
 })
 
-const Event = ({ getEvent, match, event: { event, loading } }) => {
+const Event = ({ getEvent, match, event: { event, loading }, user }) => {
   const classes = eventStyles()
 
   const eventLocation = {
     center: {
-      lat: !loading && event && event.lat,
-      lng: !loading && event && event.lng,
+      lat: event && event.lat,
+      lng: event && event.lng,
     },
     zoom: 13,
   }
@@ -37,7 +39,7 @@ const Event = ({ getEvent, match, event: { event, loading } }) => {
         <Grid item xs={12} lg={8}>
           <Paper className={classes.container}>
             <img
-              src={require(`../../assets/img/cinema.jpg`)}
+              src={require(`../../assets/img/${event.type}.jpg`)}
               className={classes.media}
               alt=""
             />
@@ -46,7 +48,7 @@ const Event = ({ getEvent, match, event: { event, loading } }) => {
                 {event.userName}
               </Typography>
               <div className={classes.eventDetails}>
-                <Typography variant="body1">Address</Typography>
+                <Typography variant="body1">{event.address}</Typography>
                 <Typography variant="body1">
                   Date de début:{" "}
                   <span>
@@ -55,14 +57,38 @@ const Event = ({ getEvent, match, event: { event, loading } }) => {
                 </Typography>
               </div>
 
-              <div className={classes.eventActions}>
-                <Button variant="contained" color="primary">
-                  <i className="fas fa-pen"></i> Editer
-                </Button>
-                <Button disableRipple variant="contained" color="secondary">
-                  <i className="fas fa-eraser"></i> Supprimer
-                </Button>
-              </div>
+              {user.user !== null && (
+                <div className={classes.eventActions}>
+                  {user.user._id === event.user && (
+                    <Fragment>
+                      <Button variant="contained" color="primary">
+                        <i className="fas fa-pen"></i> Editer
+                      </Button>
+                      <Button
+                        disableRipple
+                        variant="contained"
+                        color="secondary"
+                      >
+                        <i className="fas fa-eraser"></i> Supprimer
+                      </Button>
+                    </Fragment>
+                  )}
+                  {user.user._id !== event.user && (
+                    <Fragment>
+                      <Button variant="contained" color="primary">
+                        <i className="fas fa-pen"></i> Participer
+                      </Button>
+                      <Button
+                        disableRipple
+                        variant="contained"
+                        color="secondary"
+                      >
+                        <i className="fas fa-eraser"></i> Se desister
+                      </Button>
+                    </Fragment>
+                  )}
+                </div>
+              )}
 
               {/* Google Map */}
               <div style={{ width: "100%", height: "200px" }}>
@@ -84,6 +110,13 @@ const Event = ({ getEvent, match, event: { event, loading } }) => {
                 </Typography>
                 <Typography variant="body1">{event.description}</Typography>
               </div>
+
+              {/* COMMENTAIRES*/}
+              <EventComments
+                comments={event.comments}
+                id={event._id}
+                logUser={user}
+              />
             </div>
           </Paper>
         </Grid>
@@ -92,13 +125,8 @@ const Event = ({ getEvent, match, event: { event, loading } }) => {
             <Typography variant="h4" color="secondary">
               Liste des participants:
             </Typography>
-            {event.attendees.map(({_id, name, avatar, host}) => (
-              <AttendeeItem
-                name={name}
-                host={host}
-                avatar={avatar}
-                key={_id}
-              />
+            {event.attendees.map(({ _id, name, avatar, host }) => (
+              <AttendeeItem name={name} host={host} avatar={avatar} key={_id} />
             ))}
           </Paper>
         </Grid>

@@ -1,16 +1,16 @@
-import React, { Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { logout } from "../../redux/actions/userActions";
+import React, { Fragment } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import { Link, withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import { logout } from "../../redux/actions/userActions"
 
 const mapState = (state) => ({
   user: state.user,
-});
+})
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "1rem",
     },
   },
-}));
+}))
 
 const Navbar = ({ user, logout, history }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   const userOnline = (
     <Fragment>
@@ -48,15 +48,17 @@ const Navbar = ({ user, logout, history }) => {
         Se déconnecter
       </Button>
     </Fragment>
-  );
+  )
   const userOffline = (
     <Fragment>
-      <Button color="inherit">Se connecter</Button>
+      <Button color="inherit" component={Link} to="/login">
+        Se connecter
+      </Button>
       <Button color="inherit" component={Link} to="/register">
         S'enregistrer
       </Button>
     </Fragment>
-  );
+  )
 
   return (
     <div className={classes.root}>
@@ -72,7 +74,7 @@ const Navbar = ({ user, logout, history }) => {
         </Toolbar>
       </AppBar>
     </div>
-  );
-};
+  )
+}
 
-export default withRouter(connect(mapState, { logout })(Navbar));
+export default withRouter(connect(mapState, { logout })(Navbar))

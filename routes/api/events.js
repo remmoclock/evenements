@@ -69,7 +69,13 @@ router.post(
         address,
         lat,
         lng,
-        description
+        description,
+        attendees: {
+          user: req.user.id,
+          name: user.name,
+          avatar: user.avatar,
+          host: true
+        }
       }).save()
 
       return res.json(newEvent)
@@ -151,6 +157,110 @@ router.delete('/:eventId', [auth], async (req, res) => {
     if (err.kind === 'ObjectId') {
       return res.status(500).send('Erreur serveur')
     }
+    return res.status(500).send('Erreur serveur')
+  }
+})
+
+// Create a comment
+// Private
+// POST /api/events/:eventId/comment
+router.post('/:eventId/comment', [auth, [body('text', 'Ton commentaire ?').not().isEmpty()]], async (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
+  try {
+    const user = await User.findById(req.user.id)
+    const event = await Event.findById(req.params.eventId)
+    if (!event) {
+      return res.status(404).send('Evenement introuvable')
+    }
+
+    const comment = {
+      user: user.id,
+      name: user.name,
+      avatar: user.avatar,
+      text: req.body.text
+    }
+
+    await event.comments.unshift(comment)
+    await event.save()
+    return res.json(event)
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Erreur serveur')
+  }
+})
+
+// Delete a comment
+// Private
+// DELETE /api/events/:eventId/comment/:commentId
+router.delete('/:eventId/comment/:commentId', [auth], async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+    const event = await Event.findById(req.params.eventId)
+    if (!event) {
+      return res.status(404).send('Evenement introuvable')
+    }
+
+    const removeIndex = event.comments.filter(comment => comment.id === req.params.commentId)
+    event.comments.splice(removeIndex, 1)
+    await event.save()
+    return res.json(event)
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Erreur serveur')
+  }
+})
+
+// Subscribe to an event
+// Private
+// POST /api/events/:eventId/subscribe
+router.post('/:eventId/subscribe', [auth], async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+    const event = await Event.findById(req.params.eventId)
+    if (!event) {
+      return res.status(404).send('Evenement introuvable')
+    }
+
+    const existing = event.attendees.find(attendee => attendee.user.toString() === req.user.id)
+    if (existing) {
+      return res.status(403).send('Participes déjà')
+    }
+
+    event.attendees.push({
+      user: user.id,
+      name: user.name,
+      avatar: user.avatar,
+      host: false
+    })
+
+    await event.save()
+    return res.json(event)
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Erreur serveur')
+  }
+})
+
+// Unsubscribe to an event
+// Private
+// POST /api/events/:eventId/subscribe
+router.post('/:eventId/unsubscribe', [auth], async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId)
+    if (!event) {
+      return res.status(404).send('Evenement introuvable')
+    }
+
+    event.attendees = event.attendees.filter(attendee => attendee.user.toString() !== req.user.id)
+
+    await event.save()
+    return res.json(event)
+  } catch (err) {
+    console.error(err.message)
     return res.status(500).send('Erreur serveur')
   }
 })

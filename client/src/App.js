@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import theme from "./theme/theme";
-import "./App.css";
-import Navbar from "./components/navbar/Navbar";
-import { ThemeProvider } from "@material-ui/core/styles";
-import Landing from "./page/landing/Landing";
-import Register from "./page/register/Register";
-import Login from "./page/login/Login";
-import { connect } from "react-redux";
-import { loadUser } from "./redux/actions/userActions";
-import EventList from "./page/eventList/EventList";
-import Event from "./page/event/Event";
+import React, { useEffect } from "react"
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+import theme from "./theme/theme"
+import "./App.css"
+import Navbar from "./components/navbar/Navbar"
+import { ThemeProvider } from "@material-ui/core/styles"
+import Landing from "./page/landing/Landing"
+import Register from "./page/register/Register"
+import Login from "./page/login/Login"
+import { connect } from "react-redux"
+import { loadUser } from "./redux/actions/userActions"
+import EventList from "./page/eventList/EventList"
+import Event from "./page/event/Event"
 
 function App({ loadUser }) {
   useEffect(() => {
-    loadUser();
-  }, [loadUser]);
+    loadUser()
+  }, [loadUser])
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -31,7 +31,7 @@ function App({ loadUser }) {
         </div>
       </ThemeProvider>
     </BrowserRouter>
-  );
+  )
 }
 
-export default connect(null, { loadUser })(App);
+export default connect(null, { loadUser })(App)
