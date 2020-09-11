@@ -43,7 +43,9 @@ const Navbar = ({ user, logout, history }) => {
 
   const userOnline = (
     <Fragment>
-      <Button color="inherit">Créer un évenement</Button>
+      <Button color="inherit" component={Link} to="/create-event">
+        Créer un évenement
+      </Button>
       <Button color="inherit" onClick={() => logout(history)}>
         Se déconnecter
       </Button>

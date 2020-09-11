@@ -58,6 +58,24 @@ const eventSchema = new mongoose.Schema({
         required: true
       }
     }
+  ],
+  attendees: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+      },
+      name: {
+        type: String
+      },
+      avatar: {
+        type: String
+      },
+      host: {
+        type: Boolean,
+        default: false
+      }
+    }
   ]
 })
 

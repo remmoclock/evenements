@@ -1,4 +1,5 @@
-import React, { useEffect, Fragment } from "react"
+import React, { useEffect, Fragment, useState } from "react"
+import { Link } from "react-router-dom"
 import { eventStyles } from "./EventStyles"
 import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
@@ -8,17 +9,33 @@ import Moment from "react-moment"
 import GoogleMapReact from "google-map-react"
 import Marker from "../../components/marker/Marker"
 import { connect } from "react-redux"
-import { getEvent } from "../../redux/actions/eventsActions"
+import { getEvent, deleteEvent } from "../../redux/actions/eventsActions"
 import AttendeeItem from "../../components/attendees/AttendeeItem"
 import EventComments from "../../components/eventComments/EventComments"
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@material-ui/core"
 
 const mapState = (state) => ({
   event: state.event,
   user: state.user,
 })
 
-const Event = ({ getEvent, match, event: { event, loading }, user }) => {
+const Event = ({
+  getEvent,
+  deleteEvent,
+  match,
+  event: { event, loading },
+  user,
+  history,
+}) => {
   const classes = eventStyles()
+
+  const [modal, setModal] = useState(false)
 
   const eventLocation = {
     center: {
@@ -45,7 +62,7 @@ const Event = ({ getEvent, match, event: { event, loading }, user }) => {
             />
             <div className={classes.eventContent}>
               <Typography variant="h2" color="secondary">
-                {event.userName}
+                {event.eventName}
               </Typography>
               <div className={classes.eventDetails}>
                 <Typography variant="body1">{event.address}</Typography>
@@ -61,18 +78,61 @@ const Event = ({ getEvent, match, event: { event, loading }, user }) => {
                 <div className={classes.eventActions}>
                   {user.user._id === event.user && (
                     <Fragment>
-                      <Button variant="contained" color="primary">
+                      <Button
+                        component={Link}
+                        to={`/edit-event/${event._id}`}
+                        variant="contained"
+                        color="primary"
+                      >
                         <i className="fas fa-pen"></i> Editer
                       </Button>
                       <Button
                         disableRipple
                         variant="contained"
                         color="secondary"
+                        onClick={() => setModal(true)}
                       >
                         <i className="fas fa-eraser"></i> Supprimer
                       </Button>
                     </Fragment>
                   )}
+
+                  {/* MODAL*/}
+                  {modal && (
+                    <Dialog
+                      open={modal}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {
+                          "Es-tu vraiment VRAIMENT sûr de vouloir supprimer ton event ?"
+                        }
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Attention, tu ne peux pas revenir en arrière !
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={() => setModal(false)}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Annuler
+                        </Button>
+                        <Button
+                          onClick={() => deleteEvent(event._id, history)}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Je suis sûr
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  )}
+
                   {user.user._id !== event.user && (
                     <Fragment>
                       <Button variant="contained" color="primary">
@@ -134,4 +194,4 @@ const Event = ({ getEvent, match, event: { event, loading }, user }) => {
     )
   )
 }
-export default connect(mapState, { getEvent })(Event)
+export default connect(mapState, { getEvent, deleteEvent })(Event)

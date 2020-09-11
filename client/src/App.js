@@ -11,6 +11,8 @@ import { connect } from "react-redux"
 import { loadUser } from "./redux/actions/userActions"
 import EventList from "./page/eventList/EventList"
 import Event from "./page/event/Event"
+import CreateEvent from "./page/createEvent/CreateEvent"
+import EditEvent from "./page/editEvent/EditEvent"
 
 function App({ loadUser }) {
   useEffect(() => {
@@ -27,6 +29,8 @@ function App({ loadUser }) {
             <Route exact path="/login" component={Login} />
             <Route exact path="/dashboard" component={EventList} />
             <Route exact path="/event/:id" component={Event} />
+            <Route exact path="/create-event" component={CreateEvent} />
+            <Route exact path="/edit-event/:id" component={EditEvent} />
           </Switch>
         </div>
       </ThemeProvider>

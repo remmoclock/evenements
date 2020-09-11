@@ -5,3 +5,4 @@ export const LOGOUT = "LOGOUT";
 export const GET_EVENTS = "GET_EVENTS";
 export const GET_EVENT = "GET_EVENT";
 export const UPDATE_EVENT = "UPDATE_EVENT";
+export const CREATE_EVENT = "CREATE_EVENT";

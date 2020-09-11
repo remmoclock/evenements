@@ -28,8 +28,8 @@ export const getEvent = (id) => async (dispatch) => {
 export const addComment = (eventId, text) => async (dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   }
   try {
     const res = await axios.post(`/api/events/${eventId}/comment`, text, config)
@@ -37,6 +37,51 @@ export const addComment = (eventId, text) => async (dispatch) => {
       type: UPDATE_EVENT,
       payload: res.data,
     })
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+export const createEvent = (formData, history) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+  try {
+    const res = await axios.post("/api/events", formData, config)
+    dispatch({
+      type: GET_EVENT,
+      payload: res.data,
+    })
+    history.push(`event/${res.data._id}`)
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+export const deleteEvent = (id, history) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/events/${id}`)
+    history.push("/dashboard")
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+export const editEvent = (id, formData, history) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }
+  try {
+    const res = await axios.post(`/api/events/${id}`, formData, config)
+    dispatch({
+      type: GET_EVENT,
+      payload: res.data,
+    })
+    history.push(`/event/${res.data._id}`)
   } catch (error) {
     console.log(error.message)
   }
