@@ -66,8 +66,10 @@ const Navbar = ({ user, logout, history }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
+            <Link to="/">
             Events
+            </Link>
           </Typography>
           <Button color="inherit" component={Link} to="/dashboard">
             Liste d'évenements
