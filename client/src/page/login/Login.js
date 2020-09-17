@@ -45,7 +45,7 @@ const Login = ({ loginUser, history }) => {
     <Paper className={classes.root}>
       <form noValidate onSubmit={handleSubmit}>
         <Typography className={classes.formTitle} variant="h2" color="primary">
-          Connectes toi !!
+          Connectes toi 
         </Typography>
         <Input
           className={classes.textFields}

@@ -51,7 +51,7 @@ const Register = ({ registerUser, history }) => {
     <Paper className={classes.root}>
       <form onSubmit={handleSubmit} noValidate>
         <Typography className={classes.formTitle} variant="h2" color="primary">
-          Inscris toi !!
+          Inscris toi 
         </Typography>
         <TextField
           className={classes.textFields}

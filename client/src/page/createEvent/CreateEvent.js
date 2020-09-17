@@ -155,6 +155,7 @@ const CreateEvent = ({ createEvent, history }) => {
           rows={5}
           placeholder="Description"
           fullWidth
+          helperText="20 caractères minimum"
           value={formData.description}
           onChange={handleChange}
         />
